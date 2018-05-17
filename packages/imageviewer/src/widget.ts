@@ -18,15 +18,23 @@ import {
 } from '@phosphor/messaging';
 
 import {
-  Widget
+  PanelLayout, Widget
 } from '@phosphor/widgets';
 
+import {
+  ImageToolbar
+} from './toolbar';
 
 /**
  * The class name added to a imageviewer.
  */
 const IMAGE_CLASS = 'jp-ImageViewer';
 
+
+/**
+ * The class name added to an image viewer toolbar.
+ */
+const IMAGE_VIEWER_CLASS = 'jp-ImageViewer-toolbar';
 
 /**
  * A widget for images.
@@ -38,10 +46,17 @@ class ImageViewer extends Widget implements DocumentRegistry.IReadyWidget {
    */
   constructor(context: DocumentRegistry.Context) {
     super();
+
+    let layout = this.layout = new PanelLayout();
     this.context = context;
     this.node.tabIndex = -1;
     this.addClass(IMAGE_CLASS);
 
+    this._toolbar = new ImageToolbar({ selected: this._delimiter });
+    this._toolbar.delimiterChanged.connect(this._onDelimiterChanged, this);
+    this._toolbar.addClass(IMAGE_VIEWER_CLASS);
+    layout.addWidget(this._toolbar);
+  
     this._img = document.createElement('img');
     this.node.appendChild(this._img);
 
@@ -192,6 +207,7 @@ class ImageViewer extends Widget implements DocumentRegistry.IReadyWidget {
   private _colorinversion = 0;
   private _ready = new PromiseDelegate<void>();
   private _img: HTMLImageElement;
+  private _toolbar: ImageToolbar;
 }
 
 

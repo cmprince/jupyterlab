@@ -16,7 +16,7 @@ import {
 import '../style/index.css';
 
 export * from './widget';
-
+export * from './toolbar';
 
 /**
  * A class that tracks editor widgets.
